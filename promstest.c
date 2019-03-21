@@ -260,7 +260,19 @@ void arp_packet_unpacked(arp_packet **data, char *buffer, int buffer_size)
 
 int main(int argc, char **argv)
 {
-    u_int8_t dest[] = {192, 168, 43, 250};
+    if(argc < 2)
+    {
+        printf("Error: Lack the ip address argument.\n");
+        return 0;
+    }
+    char *ip = NULL;
+    if((ip = argv[1]) == NULL)
+    {
+        printf("Error: Lack the ip address argument.\n");
+        return 0;
+    }
+    int addr = inet_addr(ip);
+    u_int8_t dest[] = {(addr << 24) >> 24, (addr << 16) >> 24, (addr << 8) >> 24, addr >> 24};
     promstest(dest);
     return 0;
 }
